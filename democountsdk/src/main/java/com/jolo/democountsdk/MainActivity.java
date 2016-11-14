@@ -13,6 +13,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CountSDK.init(this);
+        CountSDK.initCountSDKConfig(this);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CountSDK.releaseCountSDKConfig(this);
     }
 }

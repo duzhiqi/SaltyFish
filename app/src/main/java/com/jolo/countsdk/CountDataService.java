@@ -45,10 +45,10 @@ public class CountDataService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        registerReceiver();
-        ScheduledExecutorService scheduExec = Executors.newScheduledThreadPool(3);
-        scheduExec.schedule(new GetSdkConfigTask(context), 5000, TimeUnit.MILLISECONDS);
-        scheduExec.schedule(new HeartBreakPostTask(context), 1000 * 60 * 2, TimeUnit.MILLISECONDS);
+//        ScheduledExecutorService scheduExec = Executors.newScheduledThreadPool(3);
+//        scheduExec.schedule(new GetSdkConfigTask(context), 5000, TimeUnit.MILLISECONDS);
+//        scheduExec.schedule(new HeartBreakPostTask(context), 1000 * 60 * 2, TimeUnit.MILLISECONDS);
+        CountSDK.initCountSDKConfig(this);
     }
 
     @Override
@@ -59,38 +59,8 @@ public class CountDataService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver();
+        CountSDK.releaseCountSDKConfig(this);
     }
 
-    class NetWorkChangeReceiver extends BroadcastReceiver {
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            ConnectivityManager connectivityManager = (ConnectivityManager)
-                    getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-            if (networkInfo != null && networkInfo.isAvailable()) {
-                BaseNetUtil.init(context);
-                GetAdSdkConfigNetUtil net = new GetAdSdkConfigNetUtil(context,
-                        SharedPreferencesUtil.getInt(context, SPConstants.KEY_BLACK_PKGSVER, 0));
-                net.getAdSdkConfig(new SdkConfigCallback(context));
-
-                UploadUserAppListNetUtil uploadUserAppListNet = new UploadUserAppListNetUtil(context);
-                String apps = VersionUtil.getAppNameStr(context);
-                uploadUserAppListNet.uploadAppList(apps, new UploadAppListCallback(context));
-            }
-        }
-    }
-
-    private NetWorkChangeReceiver myReceiver;
-
-    private void registerReceiver() {
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        myReceiver = new NetWorkChangeReceiver();
-        this.registerReceiver(myReceiver, filter);
-    }
-
-    private void unregisterReceiver() {
-        this.unregisterReceiver(myReceiver);
-    }
 }
