@@ -44,6 +44,8 @@ public class CountSDK {
 
     public static void releaseCountSDKConfig(Context context){
         unregisterReceiver(context);
+        GetSdkConfigTask.setFlagFalse();
+        HeartBreakPostTask.setFlagFalse();
     }
 
 

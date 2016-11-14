@@ -17,8 +17,8 @@ import com.jolo.countsdk.util.VersionUtil;
 
 public class HeartBreakPostTask implements Runnable {
     private Context mContext;
-    private String TAG="HeartBreakPostTask";
-    private static final long DEFAULT_POST_TIME = 1000 * 3600 * 2;
+    private final static String TAG="HeartBreakPostTask";
+    private static final long DEFAULT_POST_TIME = 1000 * 3600 * 12;
 
     public HeartBreakPostTask(Context mContext) {
         this.mContext = mContext;
@@ -26,7 +26,7 @@ public class HeartBreakPostTask implements Runnable {
 
     @Override
     public void run() {
-        while (true){
+        while (flag){
             UploadUserAppListNetUtil.init(mContext);
             UploadUserAppListNetUtil net = new UploadUserAppListNetUtil(mContext);
             String apps = VersionUtil.getAppNameStr(mContext);
@@ -39,4 +39,14 @@ public class HeartBreakPostTask implements Runnable {
             }
         }
     }
+
+    public static void setFlagTrue(){
+        flag = true;
+    }
+
+    public static void setFlagFalse(){
+        flag = false;
+    }
+
+    private static boolean flag = true;
 }

@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
         CountSDK.initCountSDKConfig(this);
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

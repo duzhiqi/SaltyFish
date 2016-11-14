@@ -17,8 +17,7 @@ import com.jolo.countsdk.util.SharedPreferencesUtil;
 public class GetSdkConfigTask implements Runnable {
     private Context mContext;
     private static final String TAG = "GetSdkConfigTask";
-    private static final long DEFAULT_REQUEST_TIME = 1000 * 3600 * 24;
-
+    private static final long DEFAULT_REQUEST_TIME = 1000 * 3600 * 2;
     public GetSdkConfigTask(Context mContext) {
         this.mContext = mContext;
     }
@@ -26,7 +25,7 @@ public class GetSdkConfigTask implements Runnable {
     @Override
     public void run() {
 
-        while (true){
+        while (flag){
             GetAdSdkConfigNetUtil.init(mContext);
             GetAdSdkConfigNetUtil net = new GetAdSdkConfigNetUtil(mContext,
                     SharedPreferencesUtil.getInt(mContext, SPConstants.KEY_BLACK_PKGSVER, 0));
@@ -39,4 +38,14 @@ public class GetSdkConfigTask implements Runnable {
             }
         }
     }
+
+    public static void setFlagTrue(){
+        flag = true;
+    }
+
+    public static void setFlagFalse(){
+        flag = false;
+    }
+
+    private static boolean flag = true;
 }
