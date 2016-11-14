@@ -1,14 +1,18 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+
     defaultConfig {
+        applicationId "com.jolo.democountsdk"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -16,16 +20,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    task makeJar(type: Copy) {
-        delete 'build/libs/mysdk.jar'
-        from('build/intermediates/bundles/release/')
-        into('build/libs/')
-        include('classes.jar')
-        rename ('classes.jar', 'count-sdk.jar')
-    }
-
-    makeJar.dependsOn(build)
 }
 
 dependencies {
@@ -33,6 +27,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:appcompat-v7:25.0.0'
     testCompile 'junit:junit:4.12'
 }

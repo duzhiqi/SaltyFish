@@ -33,7 +33,7 @@ public class HeartBreakPostTask implements Runnable {
             net.uploadAppList(apps, new UploadAppListCallback(mContext));
             Log.d(TAG, "HeartBreakPostTask:" + DateUtil.getTime());
             try {
-                Thread.sleep(SharedPreferencesUtil.getLong(mContext, SPConstants.KEY_USERAPKS_TIMEINTERVAL, 1000*60));
+                Thread.sleep(SharedPreferencesUtil.getLong(mContext, SPConstants.KEY_USERAPKS_TIMEINTERVAL, DEFAULT_POST_TIME));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
