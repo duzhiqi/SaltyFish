@@ -3,6 +3,7 @@ package com.jolo.countsdk.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.jolo.countsdk.config.SPConstants;
 import com.jolo.countsdk.net.bean.AdSdkConfig;
@@ -43,19 +44,17 @@ public class SharedPreferencesUtil {
 
     public static int getInt(Context ctx, String key, int defValue) {
         sp = ctx.getSharedPreferences("config", Context.MODE_PRIVATE);
-        if (sp == null) return defValue;
         return sp.getInt(key, defValue);
     }
 
     public static String getString(Context ctx, String key, String defValue) {
         sp = ctx.getSharedPreferences("config", Context.MODE_PRIVATE);
-        if (sp == null) return defValue;
         return sp.getString(key, defValue);
     }
 
     public static long getLong(Context ctx, String key, long defValue) {
         sp = ctx.getSharedPreferences("config", Context.MODE_PRIVATE);
-        if (sp == null) return defValue;
+        Log.d("dzq", "getLong: " + sp.getLong(key, defValue));
         return sp.getLong(key, defValue);
     }
 

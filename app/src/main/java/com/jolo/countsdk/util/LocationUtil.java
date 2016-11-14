@@ -32,7 +32,7 @@ public class LocationUtil {
 
         Location location = null;
         Log.e(TAG, "start init");
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     1000, 0, locationListener);
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);

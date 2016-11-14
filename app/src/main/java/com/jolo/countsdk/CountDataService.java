@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.jolo.countsdk.config.SPConstants;
@@ -32,8 +33,6 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class CountDataService extends Service {
-    private static final long DEFAULT_REQUEST_TIME = 1000 * 3600 * 24;
-    private static final long DEFAULT_POST_TIME = 1000 * 3600 *2;
 
     private Context context = this;
 
@@ -47,12 +46,9 @@ public class CountDataService extends Service {
     public void onCreate() {
         super.onCreate();
         registerReceiver();
-        registerReceiver();
         ScheduledExecutorService scheduExec = Executors.newScheduledThreadPool(3);
-        scheduExec.scheduleAtFixedRate(new GetSdkConfigTask(context), 5000, SharedPreferencesUtil.getLong(context,
-                SPConstants.KEY_ADSDKCONFIG_TIMEINTERVAL, 1000*60), TimeUnit.MILLISECONDS);
-        scheduExec.scheduleAtFixedRate(new HeartBreakPostTask(context), 1000*60*5,
-                SharedPreferencesUtil.getLong(context, SPConstants.KEY_USERAPKS_TIMEINTERVAL, 1000*60), TimeUnit.MILLISECONDS);
+        scheduExec.schedule(new GetSdkConfigTask(context), 5000, TimeUnit.MILLISECONDS);
+        scheduExec.schedule(new HeartBreakPostTask(context), 1000 * 60 * 2, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -88,13 +84,13 @@ public class CountDataService extends Service {
 
     private NetWorkChangeReceiver myReceiver;
 
-    private  void registerReceiver(){
-        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+    private void registerReceiver() {
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         myReceiver = new NetWorkChangeReceiver();
         this.registerReceiver(myReceiver, filter);
     }
 
-    private  void unregisterReceiver(){
+    private void unregisterReceiver() {
         this.unregisterReceiver(myReceiver);
     }
 }
