@@ -22,7 +22,7 @@ public class ChannelUtil {
         try {
             info = context.getPackageManager()
                     .getServiceInfo(cn, PackageManager.GET_META_DATA);
-            return info.metaData.getString("data_Name");
+            return info.metaData.getString("channel");
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

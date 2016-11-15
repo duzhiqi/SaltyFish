@@ -33,6 +33,7 @@ public class ClientInfo {
 	public final static int NONET = 0;
 	public final static int MOBILE_3G = 1;
 	public final static int MOBILE_2G = 2;
+	public final static int MOBILE_4G = 4;
 	public final static int WIFI = 3;
 	// 中国大陆三大运营商imei
 	private static final String CHA_IMSI = "46003";
@@ -73,7 +74,7 @@ public class ClientInfo {
 	// 网络状态， 网络状态会不停变化，故设置成static，需实时更新
 	public static byte networkType;
 	// 渠道code
-	public String channelCode = "";
+	public String channelCode = Config.DEFAULT_CHANNEL;
 	// ram大小
 	public int ramSize = 0;
 	// rom大小
@@ -244,6 +245,10 @@ public class ClientInfo {
 		case TelephonyManager.NETWORK_TYPE_EDGE:
 		case TelephonyManager.NETWORK_TYPE_CDMA:
 			mobileNetType = MOBILE_2G;
+			break;
+
+		case TelephonyManager.NETWORK_TYPE_LTE:
+			mobileNetType = MOBILE_4G;
 			break;
 		default:
 			mobileNetType = MOBILE_3G;
