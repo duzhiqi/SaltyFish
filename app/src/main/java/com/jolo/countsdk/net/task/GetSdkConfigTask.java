@@ -1,12 +1,12 @@
 package com.jolo.countsdk.net.task;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.jolo.countsdk.config.SPConstants;
 import com.jolo.countsdk.net.callback.SdkConfigCallback;
 import com.jolo.countsdk.net.impl.GetAdSdkConfigNetUtil;
 import com.jolo.countsdk.util.DateUtil;
+import com.jolo.countsdk.util.SLog;
 import com.jolo.countsdk.util.SharedPreferencesUtil;
 
 /**
@@ -16,7 +16,7 @@ import com.jolo.countsdk.util.SharedPreferencesUtil;
 
 public class GetSdkConfigTask implements Runnable {
     private Context mContext;
-    private static final String TAG = "GetSdkConfigTask";
+    private static final String TAG = "Debug";
     private static final long DEFAULT_REQUEST_TIME = 1000 * 3600 * 2;
     public GetSdkConfigTask(Context mContext) {
         this.mContext = mContext;
@@ -30,7 +30,7 @@ public class GetSdkConfigTask implements Runnable {
             GetAdSdkConfigNetUtil net = new GetAdSdkConfigNetUtil(mContext,
                     SharedPreferencesUtil.getInt(mContext, SPConstants.KEY_BLACK_PKGSVER, 0));
             net.getAdSdkConfig(new SdkConfigCallback(mContext));
-            Log.d(TAG, "GetSdkConfigTask:" + DateUtil.getTime());
+            SLog.d(TAG, "GetSdkConfigTask:" + DateUtil.getTime());
             try {
                 Thread.sleep(SharedPreferencesUtil.getLong(mContext, SPConstants.KEY_ADSDKCONFIG_TIMEINTERVAL, DEFAULT_REQUEST_TIME));
             } catch (InterruptedException e) {

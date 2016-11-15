@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.jolo.countsdk.config.SPConstants;
 import com.jolo.countsdk.net.bean.ClientInfo;
+import com.jolo.countsdk.util.SLog;
 import com.jolo.countsdk.util.SharedPreferencesUtil;
 import com.jolo.fd.codec.bean.BaseReq;
 import com.jolo.fd.codec.bean.BaseResp;
@@ -55,7 +56,7 @@ public abstract class BaseNetUtil<T extends BaseNetData, Q extends BaseReq, P ex
         }
         Q request = getRequest();
         request.setUserAgent(getUA());
-        Log.i("dzq", "start post request");
+        SLog.i("Debug", "start post request");
         new NetTask().execute(new NetBean(request, getRespClass(), callbacks));
     }
 
@@ -84,7 +85,6 @@ public abstract class BaseNetUtil<T extends BaseNetData, Q extends BaseReq, P ex
 
         @Override
         protected void onPostExecute(NetBean netBean) {
-            Log.i("dzq", "onPostExecute");
 //            Log.i("dzq", "netBean:code->"+ netBean.resp.getResponseCode() +", msg->" + netBean.resp.getResponseMsg());
 
             if (netBean.e != null) {
@@ -104,7 +104,6 @@ public abstract class BaseNetUtil<T extends BaseNetData, Q extends BaseReq, P ex
                 }/*else if (responseCode == null) {
                     netBean.callbacks.onOther();
                 }*/
-                Log.i("dzq", "onOther things");
                 //TODO
             }
         }

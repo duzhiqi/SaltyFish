@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.jolo.countsdk.config.Config;
 import com.jolo.countsdk.config.SPConstants;
 import com.jolo.countsdk.net.BaseNetUtil;
 import com.jolo.countsdk.net.callback.SdkConfigCallback;
@@ -46,6 +47,10 @@ public class CountSDK {
         unregisterReceiver(context);
         GetSdkConfigTask.setFlagFalse();
         HeartBreakPostTask.setFlagFalse();
+    }
+
+    public static void setDebugTrue(){
+        Config.isDebug = true;
     }
 
 

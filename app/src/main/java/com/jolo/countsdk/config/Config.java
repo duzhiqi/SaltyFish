@@ -12,4 +12,9 @@ public class Config {
     public static final String DEFAULT_CHANNEL = "cola";//默认渠道号
 
     public static final String BASE_URL = "http://218.245.6.236:12190";
+    public static boolean isDebug = false;
+
+
+
+
 }

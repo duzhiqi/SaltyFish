@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.jolo.countsdk.net.BaseNetData;
 import com.jolo.countsdk.net.BaseNetUtil;
 import com.jolo.countsdk.net.impl.UploadUserAppListNetUtil;
+import com.jolo.countsdk.util.SLog;
 import com.jolo.countsdk.util.VersionUtil;
 
 /**
@@ -23,21 +24,24 @@ public class UploadAppListCallback implements BaseNetUtil.Callbacks {
 
     @Override
     public void onFailed() {
+        SLog.e("Debug", "网络请求失败");
         rePostRequest();
     }
 
     @Override
     public void onError(Exception e) {
+        SLog.e("Debug", "网络请求失败");
         rePostRequest();
     }
 
     @Override
     public void onNetError() {
-
+        SLog.e("Debug", "无网络连接");
     }
 
     @Override
     public void onSuccess(@NonNull BaseNetData result) {
+        SLog.i("Debug", "请求成功返回");
         index = 0;
     }
 

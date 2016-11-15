@@ -8,6 +8,7 @@ import com.jolo.countsdk.net.BaseNetUtil;
 import com.jolo.countsdk.net.bean.AdSdkConfig;
 import com.jolo.countsdk.net.impl.GetAdSdkConfigNetUtil;
 import com.jolo.countsdk.net.response.GetAdSdkConfigResp;
+import com.jolo.countsdk.util.SLog;
 import com.jolo.countsdk.util.SharedPreferencesUtil;
 
 /**
@@ -27,21 +28,24 @@ public class SdkConfigCallback implements BaseNetUtil.Callbacks<AdSdkConfig, Get
 
     @Override
     public void onFailed() {
+        SLog.e("Debug", "网络请求失败");
         rePostRequest();
     }
 
     @Override
     public void onError(Exception e) {
+        SLog.e("Debug", "网络请求失败");
         rePostRequest();
     }
 
     @Override
     public void onNetError() {
-
+        SLog.i("Debug", "无网络连接.");
     }
 
     @Override
     public void onSuccess(@NonNull AdSdkConfig result) {
+        SLog.i("Debug", "请求成功返回");
         SharedPreferencesUtil.putSdkConfig(mContext, result);
         index = 0;
     }
