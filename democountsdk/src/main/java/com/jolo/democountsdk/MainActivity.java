@@ -1,5 +1,6 @@
 package com.jolo.democountsdk;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -13,13 +14,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CountSDK.setDebugTrue();
-        CountSDK.initCountSDKConfig(this);
+        Intent service = new Intent(this, MyService.class);
+        startService(service);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        CountSDK.releaseCountSDKConfig(this);
     }
 }
