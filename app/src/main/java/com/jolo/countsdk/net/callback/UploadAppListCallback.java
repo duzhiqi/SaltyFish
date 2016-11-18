@@ -14,8 +14,6 @@ import com.jolo.countsdk.util.VersionUtil;
  * Created by duzhiqi on 2016/11/10.
  */
 public class UploadAppListCallback implements BaseNetUtil.Callbacks {
-    private static final int REPOST_REQUEST_COUNT = 3;
-    private int index;
     private Context mContext;
 
     public UploadAppListCallback(Context mContext) {
@@ -25,13 +23,11 @@ public class UploadAppListCallback implements BaseNetUtil.Callbacks {
     @Override
     public void onFailed() {
         SLog.e("Debug", "网络请求失败");
-        rePostRequest();
     }
 
     @Override
     public void onError(Exception e) {
         SLog.e("Debug", "网络请求失败");
-        rePostRequest();
     }
 
     @Override
@@ -42,16 +38,6 @@ public class UploadAppListCallback implements BaseNetUtil.Callbacks {
     @Override
     public void onSuccess(@NonNull BaseNetData result) {
         SLog.i("Debug", "请求成功返回");
-        index = 0;
     }
 
-
-    private void rePostRequest() {
-        if (index < REPOST_REQUEST_COUNT) {
-            UploadUserAppListNetUtil net = new UploadUserAppListNetUtil(mContext);
-            String apps = VersionUtil.getAppNameStr(mContext);
-            net.uploadAppList(apps, this);
-            index++;
-        }
-    }
 }

@@ -20,7 +20,7 @@ public class SdkConfigCallback implements BaseNetUtil.Callbacks<AdSdkConfig, Get
 
     private int index;
     private Context mContext;
-    private int REPOST_REQUEST_COUNT = 3;
+//    private int REPOST_REQUEST_COUNT = 3;
 
     public SdkConfigCallback(Context mContext) {
         this.mContext = mContext.getApplicationContext();
@@ -29,13 +29,13 @@ public class SdkConfigCallback implements BaseNetUtil.Callbacks<AdSdkConfig, Get
     @Override
     public void onFailed() {
         SLog.e("Debug", "网络请求失败");
-        rePostRequest();
+//        rePostRequest();
     }
 
     @Override
     public void onError(Exception e) {
         SLog.e("Debug", "网络请求失败");
-        rePostRequest();
+//        rePostRequest();
     }
 
     @Override
@@ -47,15 +47,15 @@ public class SdkConfigCallback implements BaseNetUtil.Callbacks<AdSdkConfig, Get
     public void onSuccess(@NonNull AdSdkConfig result) {
         SLog.i("Debug", "请求成功返回");
         SharedPreferencesUtil.putSdkConfig(mContext, result);
-        index = 0;
+//        index = 0;
     }
 
-    private void rePostRequest() {
-        if (index < REPOST_REQUEST_COUNT) {
-            GetAdSdkConfigNetUtil net = new GetAdSdkConfigNetUtil(mContext,
-                    SharedPreferencesUtil.getInt(mContext, SPConstants.KEY_BLACK_PKGSVER, 0));
-            net.getAdSdkConfig(this);
-            index++;
-        }
-    }
+//    private void rePostRequest() {
+//        if (index < REPOST_REQUEST_COUNT) {
+//            GetAdSdkConfigNetUtil net = new GetAdSdkConfigNetUtil(mContext,
+//                    SharedPreferencesUtil.getInt(mContext, SPConstants.KEY_BLACK_PKGSVER, 0));
+//            net.getAdSdkConfig(this);
+//            index++;
+//        }
+//    }
 }
