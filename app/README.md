@@ -44,3 +44,4 @@ CountSDK.setDebugTrue();
 CountSDK.initCountSDKConfig(context);
 ```
 
+**混淆规则** ，接入方可以随意混淆。

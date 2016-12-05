@@ -47,6 +47,7 @@ public class CountSDK {
         unregisterReceiver(context);
         GetSdkConfigTask.setFlagFalse();
         HeartBreakPostTask.setFlagFalse();
+        myReceiver = null;
     }
 
     public static void setDebugTrue(){

@@ -54,7 +54,7 @@ public class SharedPreferencesUtil {
 
     public static long getLong(Context ctx, String key, long defValue) {
         sp = ctx.getSharedPreferences("config", Context.MODE_PRIVATE);
-        Log.d("dzq", "getLong: " + sp.getLong(key, defValue));
+        SLog.d("Debug", "getLong: " + sp.getLong(key, defValue));
         return sp.getLong(key, defValue);
     }
 

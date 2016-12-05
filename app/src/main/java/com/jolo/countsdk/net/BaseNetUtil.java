@@ -5,7 +5,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.jolo.countsdk.config.SPConstants;
 import com.jolo.countsdk.net.bean.ClientInfo;
@@ -64,7 +63,7 @@ public abstract class BaseNetUtil<T extends BaseNetData, Q extends BaseReq, P ex
 
         @Override
         protected NetBean doInBackground(NetBean... params) {
-            Log.i("dzq", "doInBackground");
+            SLog.i("Debug", "doInBackground");
             NetBean netBean = params[0];
             OkHttpWrapper<Q, P> okHttpWrapper = new OkHttpWrapper<>((Q) netBean.req, getUrl());
             try {
@@ -73,9 +72,9 @@ public abstract class BaseNetUtil<T extends BaseNetData, Q extends BaseReq, P ex
                 BeanTLVDecoder beanDecoder = new BeanTLVDecoder();
                 TLVDecodeContext context = new BeanTLVDecoder().getDecodeContextFactory().createDecodeContext(getRespClass(), null);
                 netBean.resp = (BaseResp) beanDecoder.decode(bytes.length, bytes, context);
-                System.err.print("原始response响应码的：" + netBean.resp.toString());
+                System.out.print("原始response响应码的：" + netBean.resp.toString());
                 return netBean;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 netBean.e = e;
                 e.printStackTrace();
                 System.err.print("原始response响应码Exception：" + e.toString());

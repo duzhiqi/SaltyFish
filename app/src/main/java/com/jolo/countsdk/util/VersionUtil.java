@@ -120,7 +120,7 @@ public class VersionUtil {
         return apps;
     }
 
-    public static boolean isUserApp(int flags) {
+    private static boolean isUserApp(int flags) {
         return (flags & ApplicationInfo.FLAG_SYSTEM) == 0;
     }
 }
