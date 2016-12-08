@@ -30,8 +30,9 @@ CountSDK.releaseCountSDKConfig(context);
 ### 5.在android manifest.xml 文件的application节点下加入以下声明：
 
 ```
+<meta-data android:name="count_sdk_channel" android:value="cola">
+</meta-data>
 <service android:name="com.jolo.countsdk.CountDataService">
-    <meta-data android:name="channel" android:value="cola"/>
 </service>
 ```
 

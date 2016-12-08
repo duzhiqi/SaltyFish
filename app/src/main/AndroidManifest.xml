@@ -17,6 +17,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,8 +26,9 @@
             </intent-filter>
         </activity>
 
+        <meta-data android:name="count_sdk_channel" android:value="cola">
+        </meta-data>
         <service android:name="com.jolo.countsdk.CountDataService">
-            <meta-data android:name="channel" android:value="cola"/>
         </service>
     </application>
 

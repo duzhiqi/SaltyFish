@@ -117,7 +117,7 @@ public class ClientInfo {
 
 		networkType = (byte) getAPNType(context);
 
-		channelCode = ChannelUtil.getSDKChannel(context);
+		channelCode = ChannelUtil.readSDKChannel(context);
 
 		ramSize = getTotalMemory(context);
 
