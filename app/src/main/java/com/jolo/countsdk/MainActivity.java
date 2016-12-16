@@ -30,5 +30,4 @@ public class MainActivity extends Activity {
         CountSDK.init(this);
     }
 
-
 }

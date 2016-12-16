@@ -1,14 +1,12 @@
 package com.jolo.countsdk.util;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -18,10 +16,12 @@ public class LocationUtil {
 
     private static final String TAG = "LocationUtil";
     // 纬度
-    public static String latitude = "0.0";
+    private static String latitude = "0.0";
     // 经度
-    public static String longitude = "0.0";
+    private static String longitude = "0.0";
 
+    private static final String LONGITUDE = "longitude";
+    private static final String LATITUDE = "latitude";
     /**
      * 初始化位置信息
      *
@@ -40,10 +40,10 @@ public class LocationUtil {
                     1000, 0, locationListener);
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (location != null) {
-                Log.e("dzq", "location get from GPS");
+                SLog.e(TAG, "location get from GPS");
                 latitude = String.valueOf(location.getLatitude());
                 longitude = String.valueOf(location.getLongitude());
-                Log.e(TAG, "get the location info");
+                SLog.e(TAG, "get the location info");
             }
         }
 
@@ -57,8 +57,13 @@ public class LocationUtil {
             if (location != null) {
                 latitude = String.valueOf(location.getLatitude()); // 经度
                 longitude = String.valueOf(location.getLongitude()); // 纬度
-                Log.e(TAG, "location get from NET_WORK ");
+                SLog.e(TAG, "location get from NET_WORK ");
             }
+        }
+
+        if (TextUtils.isEmpty(longitude) || longitude.equals("0.0")){
+            SharedPreferencesUtil.put(context, LONGITUDE, longitude);
+            SharedPreferencesUtil.put(context, LATITUDE, latitude);
         }
     }
 
@@ -89,7 +94,24 @@ public class LocationUtil {
             if (location != null) {
                 longitude = String.valueOf(location.getLongitude());
                 latitude = String.valueOf(location.getLatitude());
+
             }
         }
     };
+
+    public static String getLongitude(Context context) {
+        String longitude = SharedPreferencesUtil.getString(context, LONGITUDE, "");
+        if (TextUtils.isEmpty(longitude)){
+            return longitude;
+        }
+        return longitude;
+    }
+
+    public static String getLatitude(Context context) {
+        String latitude =  SharedPreferencesUtil.getString(context, LATITUDE, "");
+        if (TextUtils.isEmpty(latitude)){
+            return latitude;
+        }
+        return latitude;
+    }
 }
