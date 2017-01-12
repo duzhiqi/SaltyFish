@@ -22,22 +22,24 @@ public class LocationUtil {
 
     private static final String LONGITUDE = "longitude";
     private static final String LATITUDE = "latitude";
+
     /**
      * 初始化位置信息
      *
      * @param context
      */
-    public static void initLocation(Context context) {   
+    public static void initLocation(final Context context) {
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) return;
         LocationManager locationManager = (LocationManager) context
                 .getSystemService(Context.LOCATION_SERVICE);
 
         Location location = null;
-        Log.e(TAG, "start init");
+        SLog.e(TAG, "start init");
+
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    1000, 0, locationListener);
+                    1000, 10, locationListener);
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (location != null) {
                 SLog.e(TAG, "location get from GPS");
@@ -46,7 +48,6 @@ public class LocationUtil {
                 SLog.e(TAG, "get the location info");
             }
         }
-
 
         //部分机型不提供network_provider
         if (location == null && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
@@ -57,14 +58,15 @@ public class LocationUtil {
             if (location != null) {
                 latitude = String.valueOf(location.getLatitude()); // 经度
                 longitude = String.valueOf(location.getLongitude()); // 纬度
-                SLog.e(TAG, "location get from NET_WORK ");
+                SLog.e(TAG, "location get from NET_WORK. " + "latitude:" + latitude + ",longitude:" + longitude);
             }
         }
 
-        if (TextUtils.isEmpty(longitude) || longitude.equals("0.0")){
+        if (!TextUtils.isEmpty(longitude) && !longitude.equals("0.0")) {
             SharedPreferencesUtil.put(context, LONGITUDE, longitude);
             SharedPreferencesUtil.put(context, LATITUDE, latitude);
         }
+
     }
 
     private static LocationListener locationListener = new LocationListener() {
@@ -100,18 +102,10 @@ public class LocationUtil {
     };
 
     public static String getLongitude(Context context) {
-        String longitude = SharedPreferencesUtil.getString(context, LONGITUDE, "");
-        if (TextUtils.isEmpty(longitude)){
-            return longitude;
-        }
-        return longitude;
+        return SharedPreferencesUtil.getString(context, LONGITUDE, "0.0");
     }
 
     public static String getLatitude(Context context) {
-        String latitude =  SharedPreferencesUtil.getString(context, LATITUDE, "");
-        if (TextUtils.isEmpty(latitude)){
-            return latitude;
-        }
-        return latitude;
+        return SharedPreferencesUtil.getString(context, LATITUDE, "0.0");
     }
 }

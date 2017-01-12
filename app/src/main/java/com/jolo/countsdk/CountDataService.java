@@ -34,8 +34,6 @@ import java.util.concurrent.TimeUnit;
 
 public class CountDataService extends Service {
 
-    private Context context = this;
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {

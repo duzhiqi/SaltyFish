@@ -25,6 +25,7 @@
             </intent-filter>
 
         </activity>
+
         <service android:name="com.jolo.countsdk.CountDataService">
 
             <meta-data
@@ -35,6 +36,17 @@
         <service android:name=".MyService">
 
         </service>
+
+        <receiver android:name=".MyReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

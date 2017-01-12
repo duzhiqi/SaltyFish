@@ -3,6 +3,7 @@ package com.jolo.countsdk.net.bean;
 
 import com.jolo.countsdk.net.BaseNetData;
 import com.jolo.countsdk.net.response.GetAdSdkConfigResp;
+import com.jolo.countsdk.util.SharedPreferencesUtil;
 
 /**
  * Description: AdSdkConfig
@@ -27,14 +28,14 @@ public class AdSdkConfig extends BaseNetData {
 
     public Long adMsgListTimeInterval; //告诉终端隔多少时间再来请求广告列表，单位毫秒,最大值为24小时？如果超过24小时，则按照客户端设定的时间来请求
 
-    public String uuid;//用来唯一标识某一次请求UUID
+    public String uuid;//用来唯一标识某一次请求UUID ----> 已经变成gaid
 
     public String terminalId;//用来唯一标识某一次请求TerminalId
 
     public Long userAdEventTimeInterval; //告诉终端上传用户广告行为日志多久上传一次，单位毫秒
 
     public void convert(GetAdSdkConfigResp resp) {
-        uuid = resp.getUuid();
+//        uuid = resp.getUuid();
         serverTime = resp.getServerTime();
         adSdkConfigTimeInterval = resp.getAdSdkConfigTimeInterval();
         adSdkVer = resp.getAdSdkVer();
@@ -59,7 +60,6 @@ public class AdSdkConfig extends BaseNetData {
                 ", userApksTimeInterval=" + userApksTimeInterval +
                 ", adMsgListTimeInterval=" + adMsgListTimeInterval +
                 ", userAdEventTimeInterval=" + userAdEventTimeInterval +
-                ", uuid='" + uuid + '\'' +
                 ", terminalId='" + terminalId + '\'' +
                 '}';
     }

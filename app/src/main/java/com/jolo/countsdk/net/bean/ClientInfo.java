@@ -10,6 +10,8 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.os.StatFs;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -17,8 +19,11 @@ import android.util.DisplayMetrics;
 
 
 import com.jolo.countsdk.config.Config;
+import com.jolo.countsdk.config.SPConstants;
+import com.jolo.countsdk.util.AdvertisingIdClient;
 import com.jolo.countsdk.util.ChannelUtil;
 import com.jolo.countsdk.util.MCPTool;
+import com.jolo.countsdk.util.SharedPreferencesUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -51,14 +56,16 @@ public class ClientInfo {
 
 	private static ClientInfo instance;
 
+	//google advertising id
+	public static String gaid = "";
 	// 包名
 	public String packageName = null;
 	// 安卓系统版本号
 	public String androidVer = null;
 	// SDK 版本//每次发版本,必须修改~
-	public String apkVerName = "1.0001";
+	public String apkVerName = "1.0020";
 	// SDK 版本号
-	public int apkVerCode = 100001;
+	public int apkVerCode = 100020;
 	// cpu型号
 	public String cpu = null;
 	// 厂商
@@ -209,8 +216,7 @@ public class ClientInfo {
 				str2 = localBufferedReader.readLine();
 				if (str2 != null) {
 					arrayOfString = str2.split("\\s+");
-					initial_memory = Integer.valueOf(arrayOfString[1])
-							.intValue();// KB
+					initial_memory = Integer.valueOf(arrayOfString[1]).intValue();// KB
 					localBufferedReader.close();
 				}
 			}
@@ -358,5 +364,28 @@ public class ClientInfo {
 	private static String getChannelFromSP(Context context) {
 		SharedPreferences sp = context.getSharedPreferences(Config.FILE_CHANNEL_SP, Context.MODE_PRIVATE);
 		return sp.getString(Config.KEY_CHANNEL, "");
+	}
+
+
+	public static void initGaid(Context context) {
+		final Context mContext = context.getApplicationContext();
+		new Thread(new Runnable() {
+			public void run() {
+				String gaid = "";
+				try {
+					AdvertisingIdClient.AdInfo adInfo = AdvertisingIdClient
+							.getAdvertisingIdInfo(mContext);
+					gaid = adInfo.getId();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				SharedPreferencesUtil.put(mContext, SPConstants.KEY_GAID, gaid);
+			}
+		}).start();
+		gaid = getGaid(context);
+	}
+
+	private static String getGaid(Context ctx){
+		return SharedPreferencesUtil.getString(ctx, SPConstants.KEY_GAID, "");
 	}
 }

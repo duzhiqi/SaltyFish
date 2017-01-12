@@ -25,6 +25,10 @@ android {
         rename ('classes.jar', 'count-sdk.jar')
     }
 
+    lintOptions{
+        abortOnError false
+    }
+
     makeJar.dependsOn(build)
 }
 

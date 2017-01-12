@@ -5,6 +5,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.jolo.countsdk.net.bean.InstallPkg;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -118,6 +121,32 @@ public class VersionUtil {
             }
         }
         return apps;
+    }
+
+    public static String getAppNameStr(List<InstallPkg> pkgs) {
+        String appStr = "";
+        for (InstallPkg pkg : pkgs) {
+            appStr = appStr + pkg.getPkgName() + "," + pkg.getVersionName() + "," + pkg.getVersionCode() + ";";
+        }
+        return appStr;
+    }
+
+    public static List<InstallPkg> getAppNameList(Context context) {
+        PackageManager pm = context.getPackageManager();
+        List<PackageInfo> infos = pm.getInstalledPackages(0);
+        List<InstallPkg> pkgs = new ArrayList<>();
+        for (PackageInfo info : infos) {
+            ApplicationInfo applicationInfo = info.applicationInfo;
+            if (isUserApp(applicationInfo.flags)) {
+                InstallPkg pkg = new InstallPkg();
+                pkg.setPkgName(info.packageName);
+                final int versionCode = info.versionCode;
+                pkg.setVersionName(info.versionName);
+                pkg.setVersionCode(info.versionCode);
+                pkgs.add(pkg);
+            }
+        }
+        return pkgs;
     }
 
     private static boolean isUserApp(int flags) {

@@ -8,11 +8,11 @@ import com.jolo.countsdk.net.BaseNetData;
 import com.jolo.countsdk.net.BaseNetUtil;
 import com.jolo.countsdk.net.bean.AdSdkConfig;
 import com.jolo.countsdk.net.request.GetAdSdkConfigReq;
+import com.jolo.countsdk.net.response.BaseResp;
 import com.jolo.countsdk.net.response.GetAdSdkConfigResp;
 import com.jolo.countsdk.util.LocationUtil;
 import com.jolo.countsdk.util.SharedPreferencesUtil;
 import com.jolo.countsdk.util.VersionUtil;
-import com.jolo.fd.codec.bean.BaseResp;
 
 /**
  * Description:
@@ -35,13 +35,10 @@ public class GetAdSdkConfigNetUtil extends BaseNetUtil<BaseNetData, GetAdSdkConf
 
     @Override
     protected GetAdSdkConfigReq getRequest() {
-        LocationUtil.initLocation(mContext);
         GetAdSdkConfigReq request = new GetAdSdkConfigReq();
-        request.setUuid(SharedPreferencesUtil.getString(mContext, SPConstants.KEY_UUID, ""));
+        request.setUuid(SharedPreferencesUtil.getString(mContext, SPConstants.KEY_GAID, ""));
         request.setInstallTime(VersionUtil.getFirstInstallAppTime(mContext));
         request.setAdSdkVer(VersionUtil.getVersionCode(mContext));
-        request.setLat(LocationUtil.latitude);
-        request.setLng(LocationUtil.longitude);
         request.setBlackPkgsVer(blackPkgsVer);
         return request;
     }

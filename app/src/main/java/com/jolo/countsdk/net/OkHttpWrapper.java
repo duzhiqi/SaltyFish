@@ -1,15 +1,24 @@
 package com.jolo.countsdk.net;
 
-import com.jolo.fd.codec.bean.BaseReq;
-import com.jolo.fd.codec.bean.BaseResp;
-import com.jolo.fd.codec.bean.tlv.encode.TLVEncodeContext;
-import com.jolo.fd.codec.bean.tlv.encode.encoders.BeanTLVEncoder;
-import com.jolo.fd.util.ByteUtils;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.Log;
 
+import com.jolo.countsdk.net.request.BaseReq;
+import com.jolo.countsdk.net.response.BaseResp;
+import com.jolo.countsdk.util.DateUtil;
+import com.jolo.countsdk.util.JsonParser;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
@@ -19,13 +28,13 @@ import java.util.zip.GZIPInputStream;
  * Description: OkHttp封装类
  * Created by dzq on 2016/10/11.
  */
-class OkHttpWrapper<Q extends BaseReq, P extends BaseResp> {
+public class OkHttpWrapper<Q extends BaseReq, P extends BaseResp> {
     private Q req;
     private String url;
-    private static final int MAX_TIMEOUT_TIME = 60 * 1000;
+    private static final int MAX_TIMEOUT_TIME =  5 * 1000;
 
 
-    OkHttpWrapper(Q req, String url) {
+    public OkHttpWrapper(Q req, String url) {
         this.req = req;
         this.url = url;
     }
@@ -35,18 +44,18 @@ class OkHttpWrapper<Q extends BaseReq, P extends BaseResp> {
      * @return ResponseBody
      * @throws IOException
      */
-    byte[] postMethod() throws IOException {
-        BeanTLVEncoder beanEncoder = new BeanTLVEncoder();
-        TLVEncodeContext encode = beanEncoder.getEncodeContextFactory().createEncodeContext(req.getClass(), null);
-
-        byte[] data = ByteUtils.union(beanEncoder.encode(req, encode));
+    @Nullable
+    String postMethod() throws IOException {
+        String json = JsonParser.toJson(req);
+        Log.d("dzq", "request:" + json);
+        if (TextUtils.isEmpty(json)) return null;
 
         GZIPInputStream gzipInputStream;
         ByteArrayOutputStream baos;
         InputStream inStrm;
         HttpURLConnection conn;
 
-
+//        String encode = URLEncoder.encode(url, "utf-8");
         conn = (HttpURLConnection) new URL(url).openConnection();
         conn.setReadTimeout(MAX_TIMEOUT_TIME);
         conn.setConnectTimeout(MAX_TIMEOUT_TIME);
@@ -56,15 +65,17 @@ class OkHttpWrapper<Q extends BaseReq, P extends BaseResp> {
         conn.setDoOutput(true);// 表示向服务器写数据
         conn.setUseCaches(false); //不使用缓存，每次请求的数据，都需要是新的
         conn.setRequestProperty("Content-Type", "application/x-tar");
-        conn.setRequestProperty("Content-Length", String.valueOf(data.length));
+        conn.setRequestProperty("Content-Length", String.valueOf(json.getBytes().length));
         conn.setRequestProperty("Accept-Encoding", "gzip");
         conn.setRequestProperty("Connection", "Keep-Alive");
+        System.setProperty("http.keepAlive","false");
         conn.setRequestProperty("Charset", "UTF-8");
 
-        OutputStream outStream = conn.getOutputStream();
-        outStream.write(data);
-        outStream.flush();
-        outStream.close();
+//        OutputStream outStream = conn.getOutputStream();
+        BufferedOutputStream bos = new BufferedOutputStream(conn.getOutputStream());
+        bos.write(json.getBytes());
+        bos.flush();
+        bos.close();
 
         int status;
         inStrm = conn.getInputStream(); // <===注意，实际发送请求的代码段就在这里
@@ -76,8 +87,7 @@ class OkHttpWrapper<Q extends BaseReq, P extends BaseResp> {
             boolean isGzipEncoding = false;
 
             // 读取数据
-            if ((null != contentEncoding)
-                    && contentEncoding.equalsIgnoreCase("gzip")) {
+            if ((null != contentEncoding) && contentEncoding.equalsIgnoreCase("gzip")) {
                 isGzipEncoding = true;
             }
 
@@ -90,8 +100,8 @@ class OkHttpWrapper<Q extends BaseReq, P extends BaseResp> {
                 while ((len = gzipInputStream.read(readBuffer)) != -1) {
                     baos.write(readBuffer, 0, len);
                 }
-
-                return baos.toByteArray();
+                conn.disconnect();
+                return baos.toString("utf-8");
 
             } else {
                 baos = new ByteArrayOutputStream();
@@ -100,8 +110,8 @@ class OkHttpWrapper<Q extends BaseReq, P extends BaseResp> {
                 while ((len = inStrm.read(readBuffer)) != -1) {
                     baos.write(readBuffer, 0, len);
                 }
-
-                return baos.toByteArray();
+                conn.disconnect();
+                return baos.toString("utf-8");
             }
         }
 
@@ -116,4 +126,5 @@ class OkHttpWrapper<Q extends BaseReq, P extends BaseResp> {
         }
         return null;
     }
+
 }

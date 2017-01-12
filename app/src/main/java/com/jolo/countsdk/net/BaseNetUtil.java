@@ -8,15 +8,14 @@ import android.support.annotation.NonNull;
 
 import com.jolo.countsdk.config.SPConstants;
 import com.jolo.countsdk.net.bean.ClientInfo;
+import com.jolo.countsdk.net.bean.UserAgent;
+import com.jolo.countsdk.net.request.BaseReq;
+import com.jolo.countsdk.net.response.BaseResp;
+import com.jolo.countsdk.util.JsonParser;
+import com.jolo.countsdk.util.LocationUtil;
 import com.jolo.countsdk.util.SLog;
 import com.jolo.countsdk.util.SharedPreferencesUtil;
-import com.jolo.fd.codec.bean.BaseReq;
-import com.jolo.fd.codec.bean.BaseResp;
-import com.jolo.fd.codec.bean.UserAgent;
-import com.jolo.fd.codec.bean.tlv.decode.TLVDecodeContext;
-import com.jolo.fd.codec.bean.tlv.decode.decoders.BeanTLVDecoder;
-
-import java.io.IOException;
+import com.jolo.countsdk.util.VersionUtil;
 
 /**
  * Description: 网络请求
@@ -24,6 +23,8 @@ import java.io.IOException;
  */
 
 public abstract class BaseNetUtil<T extends BaseNetData, Q extends BaseReq, P extends BaseResp> {
+
+    private static final String TAG = BaseNetUtil.class.getSimpleName();
 
     private static ConnectivityManager cm;
     private UserAgent ua;
@@ -55,7 +56,7 @@ public abstract class BaseNetUtil<T extends BaseNetData, Q extends BaseReq, P ex
         }
         Q request = getRequest();
         request.setUserAgent(getUA());
-        SLog.i("Debug", "start post request");
+        SLog.i(TAG, "start post request");
         new NetTask().execute(new NetBean(request, getRespClass(), callbacks));
     }
 
@@ -63,16 +64,16 @@ public abstract class BaseNetUtil<T extends BaseNetData, Q extends BaseReq, P ex
 
         @Override
         protected NetBean doInBackground(NetBean... params) {
-            SLog.i("Debug", "doInBackground");
+            SLog.i(TAG, "doInBackground");
             NetBean netBean = params[0];
             OkHttpWrapper<Q, P> okHttpWrapper = new OkHttpWrapper<>((Q) netBean.req, getUrl());
             try {
-//                byte[] bytes = okHttpWrapper.getBytesResponse();
-                byte[] bytes = okHttpWrapper.postMethod();
-                BeanTLVDecoder beanDecoder = new BeanTLVDecoder();
-                TLVDecodeContext context = new BeanTLVDecoder().getDecodeContextFactory().createDecodeContext(getRespClass(), null);
-                netBean.resp = (BaseResp) beanDecoder.decode(bytes.length, bytes, context);
-                System.out.print("原始response响应码的：" + netBean.resp.toString());
+                String result = okHttpWrapper.postMethod();
+                SLog.d(TAG,"There is result json: " + result);
+                netBean.resp = JsonParser.fromJson(result, getRespClass());
+                if (netBean.resp != null) {
+                    System.out.print("原始response响应码的：" + netBean.resp.toString());
+                }
                 return netBean;
             } catch (Exception e) {
                 netBean.e = e;
@@ -84,7 +85,7 @@ public abstract class BaseNetUtil<T extends BaseNetData, Q extends BaseReq, P ex
 
         @Override
         protected void onPostExecute(NetBean netBean) {
-//            Log.i("dzq", "netBean:code->"+ netBean.resp.getResponseCode() +", msg->" + netBean.resp.getResponseMsg());
+//            SLog.i(TAG, "netBean:code->" +", msg->" + netBean.resp.getResponseMsg());
 
             if (netBean.e != null) {
                 netBean.callbacks.onError(netBean.e);
@@ -165,6 +166,9 @@ public abstract class BaseNetUtil<T extends BaseNetData, Q extends BaseReq, P ex
                 ua.setDpi(clientInfo.dpi);
                 ua.setMac(clientInfo.mac);
                 ua.setTerminalId(SharedPreferencesUtil.getString(getContext(), SPConstants.KEY_TERMINAL_ID, ""));
+                ua.setLat(LocationUtil.getLatitude(getContext()));
+                ua.setLng(LocationUtil.getLongitude(getContext()));
+                ua.setInstallTime(VersionUtil.getFirstInstallAppTime(getContext()));
             }
         } else {
             ua.setNetworkType(ClientInfo.networkType); // 网络类型经常发生变化,每次要重新设置

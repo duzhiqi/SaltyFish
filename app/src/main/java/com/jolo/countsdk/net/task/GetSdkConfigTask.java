@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.jolo.countsdk.config.SPConstants;
+import com.jolo.countsdk.net.bean.ClientInfo;
 import com.jolo.countsdk.net.callback.SdkConfigCallback;
 import com.jolo.countsdk.net.impl.GetAdSdkConfigNetUtil;
 import com.jolo.countsdk.util.DateUtil;
@@ -22,15 +23,15 @@ public class GetSdkConfigTask implements Runnable {
     private boolean noRepeatRequest = true;
 
     public GetSdkConfigTask(Context mContext) {
-        this.mContext = mContext;
+        this.mContext = mContext.getApplicationContext();
     }
 
     private Handler handler =  new Handler();
 
     @Override
     public void run() {
-
         while (flag){
+            ClientInfo.initGaid(mContext);
             GetAdSdkConfigNetUtil.init(mContext);
             GetAdSdkConfigNetUtil net = new GetAdSdkConfigNetUtil(mContext,
                     SharedPreferencesUtil.getInt(mContext, SPConstants.KEY_BLACK_PKGSVER, 0));

@@ -18,4 +18,6 @@ public interface SPConstants {
     String KEY_ADSDKCONFIG_TIMEINTERVAL = "adSdkConfigTimeInterval";
     String KEY_TERMINAL_ID = "terminalId";
     String KEY_ADEVENT_TIME_INTERVAL = "userAdEventTimeInterval";
+
+    String KEY_GAID = KEY_UUID;
 }

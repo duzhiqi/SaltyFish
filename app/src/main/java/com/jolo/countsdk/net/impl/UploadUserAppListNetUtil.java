@@ -3,12 +3,13 @@ package com.jolo.countsdk.net.impl;
 import android.content.Context;
 
 import com.jolo.countsdk.config.Config;
+import com.jolo.countsdk.config.SPConstants;
 import com.jolo.countsdk.net.BaseNetData;
 import com.jolo.countsdk.net.BaseNetUtil;
 import com.jolo.countsdk.net.request.UploadUserInsApplistReq;
-import com.jolo.countsdk.util.LocationUtil;
+import com.jolo.countsdk.net.response.BaseResp;
+import com.jolo.countsdk.util.Base64;
 import com.jolo.countsdk.util.SharedPreferencesUtil;
-import com.jolo.fd.codec.bean.BaseResp;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,12 +35,10 @@ public class UploadUserAppListNetUtil extends BaseNetUtil<BaseNetData, UploadUse
 
     @Override
     protected UploadUserInsApplistReq getRequest() {
-        LocationUtil.initLocation(mContext);
         UploadUserInsApplistReq request = new UploadUserInsApplistReq();
-        request.setUuid(SharedPreferencesUtil.getString(mContext, "uuid", ""));
-        request.setLng(LocationUtil.longitude);
-        request.setLat(LocationUtil.latitude);
-        request.setUserApks(apkLists);
+        request.setUuid(SharedPreferencesUtil.getString(mContext, SPConstants.KEY_GAID, ""));
+        String encode = Base64.encode(apkLists);
+        request.setUserApks(encode);
         return request;
     }
 

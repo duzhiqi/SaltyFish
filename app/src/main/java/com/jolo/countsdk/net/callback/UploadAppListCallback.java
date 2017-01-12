@@ -3,31 +3,35 @@ package com.jolo.countsdk.net.callback;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.jolo.countsdk.dao.AdvMsgListDao;
 import com.jolo.countsdk.net.BaseNetData;
 import com.jolo.countsdk.net.BaseNetUtil;
-import com.jolo.countsdk.net.impl.UploadUserAppListNetUtil;
+import com.jolo.countsdk.net.bean.InstallPkg;
 import com.jolo.countsdk.util.SLog;
-import com.jolo.countsdk.util.VersionUtil;
+
+import java.util.List;
 
 /**
  * Description:
  * Created by duzhiqi on 2016/11/10.
  */
 public class UploadAppListCallback implements BaseNetUtil.Callbacks {
-    private Context mContext;
+    private List<InstallPkg> pkgs;
+    private AdvMsgListDao dao;
 
-    public UploadAppListCallback(Context mContext) {
-        this.mContext = mContext.getApplicationContext();
+    public UploadAppListCallback(List<InstallPkg> list, AdvMsgListDao dao) {
+        pkgs = list;
+        this.dao = dao;
     }
 
     @Override
     public void onFailed() {
-        SLog.e("Debug", "网络请求失败");
+        SLog.e("Debug", "a网络请求失败");
     }
 
     @Override
     public void onError(Exception e) {
-        SLog.e("Debug", "网络请求失败");
+        SLog.e("Debug", "b网络请求失败");
     }
 
     @Override
@@ -38,6 +42,7 @@ public class UploadAppListCallback implements BaseNetUtil.Callbacks {
     @Override
     public void onSuccess(@NonNull BaseNetData result) {
         SLog.i("Debug", "请求成功返回");
+        dao.updatePkgMark(pkgs);
     }
 
 }
