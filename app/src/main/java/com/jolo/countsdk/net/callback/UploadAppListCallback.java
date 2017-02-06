@@ -1,6 +1,5 @@
 package com.jolo.countsdk.net.callback;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.jolo.countsdk.dao.AdvMsgListDao;
@@ -26,12 +25,12 @@ public class UploadAppListCallback implements BaseNetUtil.Callbacks {
 
     @Override
     public void onFailed() {
-        SLog.e("Debug", "a网络请求失败");
+        SLog.e("Debug",   "UploadAppListCallback-->onFailed网络请求失败");
     }
 
     @Override
     public void onError(Exception e) {
-        SLog.e("Debug", "b网络请求失败");
+        SLog.e("Debug", "UploadAppListCallback-->onError网络请求失败");
     }
 
     @Override

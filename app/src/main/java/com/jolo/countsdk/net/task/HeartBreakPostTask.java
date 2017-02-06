@@ -35,6 +35,7 @@ public class HeartBreakPostTask implements Runnable {
     public void run() {
         SLog.d(TAG, "HeartBreakPostTask:" + DateUtil.getTime());
         while (flag) {
+            SLog.d(TAG, "HeartBreakPostTask2:" + DateUtil.getTime());
             ClientInfo.initGaid(mContext);
             UploadUserAppListNetUtil.init(mContext);
             List<InstallPkg> appNameList = VersionUtil.getAppNameList(mContext);

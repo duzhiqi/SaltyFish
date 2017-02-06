@@ -2,18 +2,11 @@ package com.jolo.countsdk.net;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.jolo.countsdk.net.request.BaseReq;
 import com.jolo.countsdk.net.response.BaseResp;
-import com.jolo.countsdk.util.DateUtil;
 import com.jolo.countsdk.util.JsonParser;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import com.jolo.countsdk.util.SLog;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -47,7 +40,7 @@ public class OkHttpWrapper<Q extends BaseReq, P extends BaseResp> {
     @Nullable
     String postMethod() throws IOException {
         String json = JsonParser.toJson(req);
-        Log.d("dzq", "request:" + json);
+        SLog.d("dzq", "request:" + json);
         if (TextUtils.isEmpty(json)) return null;
 
         GZIPInputStream gzipInputStream;
@@ -78,8 +71,10 @@ public class OkHttpWrapper<Q extends BaseReq, P extends BaseResp> {
         bos.close();
 
         int status;
-        inStrm = conn.getInputStream(); // <===注意，实际发送请求的代码段就在这里
         status = conn.getResponseCode();
+        SLog.e("Debug", " responseCode = " + status);
+        inStrm = conn.getInputStream(); // <===注意，实际发送请求的代码段就在这里
+
 
         if (status == HttpURLConnection.HTTP_OK) {
             String contentEncoding = conn.getContentEncoding();

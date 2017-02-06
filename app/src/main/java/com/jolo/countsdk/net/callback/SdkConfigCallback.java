@@ -3,10 +3,8 @@ package com.jolo.countsdk.net.callback;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.jolo.countsdk.config.SPConstants;
 import com.jolo.countsdk.net.BaseNetUtil;
 import com.jolo.countsdk.net.bean.AdSdkConfig;
-import com.jolo.countsdk.net.impl.GetAdSdkConfigNetUtil;
 import com.jolo.countsdk.net.response.GetAdSdkConfigResp;
 import com.jolo.countsdk.util.SLog;
 import com.jolo.countsdk.util.SharedPreferencesUtil;
@@ -26,12 +24,12 @@ public class SdkConfigCallback implements BaseNetUtil.Callbacks<AdSdkConfig, Get
 
     @Override
     public void onFailed() {
-        SLog.e("Debug", "网络请求失败");
+        SLog.e("Debug", "SdkConfigCallback-->onFailed网络请求失败");
     }
 
     @Override
     public void onError(Exception e) {
-        SLog.e("Debug", "网络请求失败");
+        SLog.e("Debug", "SdkConfigCallback-->onError网络请求失败");
     }
 
     @Override
@@ -44,5 +42,4 @@ public class SdkConfigCallback implements BaseNetUtil.Callbacks<AdSdkConfig, Get
         SLog.i("Debug", "请求成功返回");
         SharedPreferencesUtil.putSdkConfig(mContext, result);
     }
-
 }
