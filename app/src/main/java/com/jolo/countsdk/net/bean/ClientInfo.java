@@ -10,19 +10,15 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.os.StatFs;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
-
 import com.jolo.countsdk.config.Config;
 import com.jolo.countsdk.config.SPConstants;
 import com.jolo.countsdk.util.AdvertisingIdClient;
 import com.jolo.countsdk.util.ChannelUtil;
-import com.jolo.countsdk.util.MCPTool;
 import com.jolo.countsdk.util.SharedPreferencesUtil;
 
 import java.io.BufferedReader;
@@ -124,7 +120,7 @@ public class ClientInfo {
 
 		networkType = (byte) getAPNType(context);
 
-		channelCode = ChannelUtil.readSDKChannel(context);
+		channelCode = getSDKChannel(context,Config.DEFAULT_CHANNEL);
 
 		ramSize = getTotalMemory(context);
 
@@ -349,7 +345,8 @@ public class ClientInfo {
 		if (!TextUtils.isEmpty(channel) && !channel.equals(defValue)) {
 			return channel;
 		}
-		channel = MCPTool.getChannelId(context, null, defValue);
+//		channel = MCPTool.getChannelId(context, null, defValue);
+		channel = ChannelUtil.readSDKChannel(context);
 		writeChannelToSP(context, channel);
 		return channel;
 	}

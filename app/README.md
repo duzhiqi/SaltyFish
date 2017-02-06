@@ -1,6 +1,6 @@
 # 统计SDK接入文档(CountSDK)
 
-### 1.在工程的lib目录下加入jar包：**tlv.jar** 和 **count-sdk.jar**
+### 1.在工程的lib目录下加入jar包：**count-sdk.jar**
 
 ### 2.在后台常驻进程的service的onCreate()方法中加入如下代码：
 
@@ -30,11 +30,14 @@ CountSDK.releaseCountSDKConfig(context);
 ### 5.在android manifest.xml 文件的application节点下加入以下声明：
 
 ```
-<meta-data android:name="count_sdk_channel" android:value="cola">
-</meta-data>
-<service android:name="com.jolo.countsdk.CountDataService">
-</service>
+<meta-data android:name="count_sdk_channel" android:value="cola"></meta-data>
+
+<service android:name="com.jolo.countsdk.CountDataService"></service>
 ```
+
+- 注意：**在application节点下加入签名<meta-data android:name="count_sdk_channel" android:value="cola"></meta-data> 请一定不要忘记**
+- 注意：**在application节点下加入签名<meta-data android:name="count_sdk_channel" android:value="cola"></meta-data> 请一定不要忘记**
+- 注意：**在application节点下加入签名<meta-data android:name="count_sdk_channel" android:value="cola"></meta-data> 请一定不要忘记**
 
 **以上组件的声明中，meta-data的value的值表示上传至服务器的渠道号。**
 
@@ -46,3 +49,4 @@ CountSDK.initCountSDKConfig(context);
 ```
 
 **混淆规则** ，接入方可以随意混淆。
+

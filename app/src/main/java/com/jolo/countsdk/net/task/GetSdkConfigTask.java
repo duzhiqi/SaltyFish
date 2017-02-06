@@ -18,7 +18,7 @@ import com.jolo.countsdk.util.SharedPreferencesUtil;
 public class GetSdkConfigTask implements Runnable {
     private Context mContext;
     private static final String TAG = "Debug";
-    private static final long DEFAULT_REQUEST_TIME = 1000 * 3600 * 2;
+    private static final long DEFAULT_REQUEST_TIME = 1000 * 60 * 5;
 //    private boolean noRepeatRequest = true;
 
     public GetSdkConfigTask(Context mContext) {

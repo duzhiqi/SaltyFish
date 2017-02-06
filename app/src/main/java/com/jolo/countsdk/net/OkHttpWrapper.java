@@ -61,7 +61,6 @@ public class OkHttpWrapper<Q extends BaseReq, P extends BaseResp> {
         conn.setRequestProperty("Content-Length", String.valueOf(json.getBytes().length));
         conn.setRequestProperty("Accept-Encoding", "gzip");
         conn.setRequestProperty("Connection", "Keep-Alive");
-        System.setProperty("http.keepAlive","false");
         conn.setRequestProperty("Charset", "UTF-8");
 
 //        OutputStream outStream = conn.getOutputStream();
@@ -72,9 +71,8 @@ public class OkHttpWrapper<Q extends BaseReq, P extends BaseResp> {
 
         int status;
         status = conn.getResponseCode();
-        SLog.e("Debug", " responseCode = " + status);
+        SLog.e("Debug", " http response code = " + status);
         inStrm = conn.getInputStream(); // <===注意，实际发送请求的代码段就在这里
-
 
         if (status == HttpURLConnection.HTTP_OK) {
             String contentEncoding = conn.getContentEncoding();
